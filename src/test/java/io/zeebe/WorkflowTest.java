@@ -19,13 +19,10 @@ import static io.zeebe.fixtures.ZeebeTestRule.DEFAULT_TOPIC;
 
 import io.zeebe.client.ZeebeClient;
 import io.zeebe.client.event.WorkflowInstanceEvent;
-import io.zeebe.dmn.DmnRepository;
-import io.zeebe.dmn.DmnTaskWorker;
+import io.zeebe.dmn.DmnApplication;
 import io.zeebe.fixtures.ZeebeTestRule;
 import io.zeebe.model.bpmn.Bpmn;
 import io.zeebe.model.bpmn.instance.WorkflowDefinition;
-import org.camunda.bpm.dmn.engine.DmnEngine;
-import org.camunda.bpm.dmn.engine.DmnEngineConfiguration;
 import org.junit.*;
 
 public class WorkflowTest
@@ -34,7 +31,8 @@ public class WorkflowTest
     public ZeebeTestRule testRule = new ZeebeTestRule();
 
     private ZeebeClient client;
-    private DmnTaskWorker taskWorker;
+
+    private DmnApplication application;
 
     @Before
     public void deploy()
@@ -59,18 +57,21 @@ public class WorkflowTest
         client.workflows().deploy(DEFAULT_TOPIC)
                 .resourceStringUtf8(workflowAsString)
                 .execute();
+    }
 
-        final DmnEngine dmnEngine = DmnEngineConfiguration.createDefaultDmnEngineConfiguration().buildEngine();
-        final String dmnDirectory = getClass().getResource("/").getFile();
-        final DmnRepository repository = new DmnRepository(dmnDirectory, dmnEngine);
-        taskWorker = new DmnTaskWorker(client, DEFAULT_TOPIC, repository, dmnEngine);
-        taskWorker.open();
+    @Before
+    public void startApp()
+    {
+        final String dmnTestRepo = getClass().getResource("/").getFile();
+
+        application = new DmnApplication(dmnTestRepo, DEFAULT_TOPIC);
+        application.start();
     }
 
     @After
     public void cleanUp()
     {
-        taskWorker.close();
+        application.close();
     }
 
     @Test

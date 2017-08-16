@@ -1,10 +1,10 @@
 package io.zeebe.dmn;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import org.camunda.bpm.dmn.engine.DmnDecision;
 import org.camunda.bpm.dmn.engine.DmnEngine;
@@ -20,13 +20,15 @@ public class DmnRepository
     private final String directory;
     private final DmnEngine dmnEngine;
 
+    private final Map<String, DmnDecision> decisionsById = new HashMap<>();
+
     public DmnRepository(String directory, DmnEngine dmnEngine)
     {
         this.directory = directory;
         this.dmnEngine = dmnEngine;
-    }
 
-    private final Map<String, DmnDecision> decisionsById = new HashMap<>();
+        scanDirectory();
+    }
 
     public DmnDecision findDecisionById(String decisionId)
     {
@@ -44,28 +46,38 @@ public class DmnRepository
 
         try
         {
-            Files.walk(Paths.get(directory)).filter(p -> p.getFileName().toString().endsWith(".dmn")).forEach(p ->
-            {
-                try
-                {
-                    final DmnModelInstance dmnModel = Dmn.readModelFromFile(p.toFile());
-                    dmnEngine.parseDecisions(dmnModel).forEach(decision ->
-                    {
-                        LOG.debug("Found decision with id '{}' in file: {}", decision.getKey(), p.getFileName());
-
-                        decisionsById.put(decision.getKey(), decision);
-                    });
-                }
-                catch (Throwable t)
-                {
-                    LOG.warn("Failed to parse decision: {}", p.getFileName(), t);
-                }
-            });
+            Files.walk(Paths.get(directory)).filter(isDmnFile()).forEach(this::readDmnFile);
         }
         catch (IOException e)
         {
             LOG.warn("Fail to scan directory: {}", directory, e);
         }
+    }
+
+    private void readDmnFile(Path dmnFile)
+    {
+        final String fileName = dmnFile.getFileName().toString();
+
+        try
+        {
+            final DmnModelInstance dmnModel = Dmn.readModelFromFile(dmnFile.toFile());
+
+            dmnEngine.parseDecisions(dmnModel).forEach(decision ->
+            {
+                LOG.debug("Found decision with id '{}' in file: {}", decision.getKey(), fileName);
+
+                decisionsById.put(decision.getKey(), decision);
+            });
+        }
+        catch (Throwable t)
+        {
+            LOG.warn("Failed to parse decision: {}", fileName, t);
+        }
+    }
+
+    private Predicate<Path> isDmnFile()
+    {
+        return p -> p.getFileName().toString().endsWith(".dmn");
     }
 
 }
