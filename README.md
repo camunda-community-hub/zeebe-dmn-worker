@@ -15,11 +15,16 @@ Build with Maven
 
 Execute the JAR file via
 
-`java -jar target/zeebe-dmn.jar`
+`java -jar zeebe-dmn.jar`
 
 ## How to configure
 
-You can provide a properties file `application.properties` to configure the Zeebe client and set
+You can provide a properties file `application.properties` to configure the Zeebe client and the DMN task worker.
 
-* the directory of the DMN repository (default: 'repo')
-* the task topic (default: 'default-topic')
+```
+# DMN task worker
+zeebe.dmn.repo=dmn-repo                             # default: repo
+zeebe.dmn.topic=default-topic                       # => default
+# Zeebe Client
+zeebe.client.broker.contactPoint=127.0.0.1:51015    # => default
+```
