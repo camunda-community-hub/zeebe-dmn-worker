@@ -15,8 +15,7 @@
  */
 package io.zeebe.dmn;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -56,10 +55,10 @@ public class StandaloneDmnApplication
 
         try
         {
-            final InputStream propertyStream = StandaloneDmnApplication.class.getResourceAsStream(PROP_FILE);
-            if (propertyStream != null)
+            final File propertyFile = new File(PROP_FILE);
+            if (propertyFile.exists())
             {
-                properties.load(propertyStream);
+                properties.load(new FileInputStream(propertyFile));
             }
             else
             {
