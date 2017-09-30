@@ -45,7 +45,6 @@ public class ClientRule extends ExternalResource
     protected void before() throws Throwable
     {
         client = ZeebeClient.create(properties);
-        client.connect();
     }
 
     @Override

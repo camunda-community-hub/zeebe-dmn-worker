@@ -46,7 +46,6 @@ public class DmnApplication
     {
         client = ZeebeClient.create(clientProperties);
 
-        client.connect();
         LOG.debug("Connected.");
 
         taskWorker = buildTaskWorker(client);
