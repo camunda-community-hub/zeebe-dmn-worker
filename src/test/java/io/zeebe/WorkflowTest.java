@@ -18,6 +18,7 @@ package io.zeebe;
 import static io.zeebe.fixtures.ZeebeTestRule.DEFAULT_TOPIC;
 
 import io.zeebe.client.ZeebeClient;
+import io.zeebe.client.event.ResourceType;
 import io.zeebe.client.event.WorkflowInstanceEvent;
 import io.zeebe.dmn.DmnApplication;
 import io.zeebe.fixtures.ZeebeTestRule;
@@ -55,7 +56,7 @@ public class WorkflowTest
         final String workflowAsString = Bpmn.convertToString(workflowDefinition);
 
         client.workflows().deploy(DEFAULT_TOPIC)
-                .resourceStringUtf8(workflowAsString)
+                .resourceStringUtf8(workflowAsString, ResourceType.BPMN_XML)
                 .execute();
     }
 
