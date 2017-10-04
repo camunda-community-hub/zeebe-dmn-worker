@@ -9,12 +9,12 @@
 	<parent>
 		<groupId>io.zeebe</groupId>
 		<artifactId>zb-parent</artifactId>
-		<version>0.2.0-SNAPSHOT</version>
+		<version>0.2.0</version>
 	</parent>
 
 	<properties>
-		<version.zeebe>0.3.0-SNAPSHOT</version.zeebe>
-		<version.zb-bpmn-model>0.1.0-SNAPSHOT</version.zb-bpmn-model>
+		<version.zeebe>0.3.0</version.zeebe>
+		<version.zb-bpmn-model>0.1.0</version.zb-bpmn-model>
 		<version.dmn>7.8.0-SNAPSHOT</version.dmn>
 		<version.feel>1.2.0-SNAPSHOT</version.feel>
 	</properties>
@@ -26,13 +26,13 @@
 			<artifactId>zeebe-client-java</artifactId>
 			<version>${version.zeebe}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.camunda.bpm.dmn</groupId>
 			<artifactId>camunda-engine-dmn</artifactId>
 			<version>${version.dmn}</version>
 		</dependency>
-		
+
 		<dependency>
 		  <groupId>org.camunda.bpm.extension.feel.scala</groupId>
 		  <artifactId>feel-engine</artifactId>
