@@ -42,3 +42,10 @@ zeebe.dmn.topic=default-topic                       # => default
 # Zeebe Client
 zeebe.client.broker.contactPoint=127.0.0.1:51015    # => default
 ```
+
+## Code of Conduct
+
+This project adheres to the Contributor Covenant [Code of
+Conduct](/CODE_OF_CONDUCT.md). By participating, you are expected to uphold
+this code. Please report unacceptable behavior to
+code-of-conduct@zeebe.io.
