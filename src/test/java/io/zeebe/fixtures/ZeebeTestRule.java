@@ -33,8 +33,6 @@ import org.junit.rules.ExternalResource;
 
 public class ZeebeTestRule extends ExternalResource
 {
-    public static final String DEFAULT_TOPIC = "default-topic";
-
     private EmbeddedBrokerRule brokerRule;
     private ClientRule clientRule;
     private TopicEventRecorder topicEventRecorder;
@@ -47,9 +45,9 @@ public class ZeebeTestRule extends ExternalResource
     public ZeebeTestRule(Supplier<InputStream> configSupplier, Supplier<Properties> propertiesProvider)
     {
         brokerRule = new EmbeddedBrokerRule(configSupplier);
-        clientRule = new ClientRule(propertiesProvider);
+        clientRule = new ClientRule(propertiesProvider, true);
 
-        topicEventRecorder = new TopicEventRecorder(clientRule, DEFAULT_TOPIC);
+        topicEventRecorder = new TopicEventRecorder(clientRule, clientRule.getDefaultTopic());
     }
 
     public ZeebeClient getClient()
@@ -128,6 +126,16 @@ public class ZeebeTestRule extends ExternalResource
         {
             // ignore
         }
+    }
+
+    public String getDefaultTopic()
+    {
+        return clientRule.getDefaultTopic();
+    }
+
+    public int getDefaultPartition()
+    {
+        return clientRule.getDefaultPartition();
     }
 
 }
