@@ -14,8 +14,8 @@
 
 	<properties>
 		<version.zeebe>0.4.0</version.zeebe>
-		<version.dmn>7.8.0-SNAPSHOT</version.dmn>
-		<version.feel>1.2.0-SNAPSHOT</version.feel>
+		<version.dmn>7.8.0-alpha5</version.dmn>
+		<version.feel>1.3.0</version.feel>
 	</properties>
 
 	<dependencies>
