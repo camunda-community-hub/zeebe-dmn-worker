@@ -13,10 +13,9 @@
 	</parent>
 
 	<properties>
-		<version.zeebe>0.3.0</version.zeebe>
-		<version.zb-bpmn-model>0.1.0</version.zb-bpmn-model>
-		<version.dmn>7.8.0-SNAPSHOT</version.dmn>
-		<version.feel>1.2.0-SNAPSHOT</version.feel>
+		<version.zeebe>0.4.0</version.zeebe>
+		<version.dmn>7.8.0-alpha5</version.dmn>
+		<version.feel>1.3.0</version.feel>
 	</properties>
 
 	<dependencies>
@@ -59,7 +58,7 @@
 		<dependency>
 			<groupId>io.zeebe</groupId>
 			<artifactId>zb-bpmn-model</artifactId>
-			<version>${version.zb-bpmn-model}</version>
+			<version>${version.zeebe}</version>
 			<scope>test</scope>
 		</dependency>
 

@@ -15,25 +15,34 @@
  */
 package io.zeebe.fixtures;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.function.Supplier;
 
 import io.zeebe.client.ZeebeClient;
+import io.zeebe.client.clustering.impl.TopicLeader;
+import io.zeebe.client.clustering.impl.TopologyResponse;
 import org.junit.rules.ExternalResource;
 
 public class ClientRule extends ExternalResource
 {
-    private ZeebeClient client;
-    private final Properties properties;
+    public static final String DEFAULT_TOPIC = "default-topic";
+    protected int defaultPartition;
 
-    public ClientRule()
+    protected ZeebeClient client;
+    protected final boolean createDefaultTopic;
+
+    protected final Properties properties;
+
+    public ClientRule(final boolean createDefaultTopic)
     {
-        this(() -> new Properties());
+        this(() -> new Properties(), createDefaultTopic);
     }
 
-    public ClientRule(Supplier<Properties> propertiesProvider)
+    public ClientRule(Supplier<Properties> propertiesProvider, boolean createDefaultTopic)
     {
         this.properties = propertiesProvider.get();
+        this.createDefaultTopic = createDefaultTopic;
     }
 
     public ZeebeClient getClient()
@@ -45,6 +54,33 @@ public class ClientRule extends ExternalResource
     protected void before() throws Throwable
     {
         client = ZeebeClient.create(properties);
+
+        if (createDefaultTopic)
+        {
+            createDefaultTopic();
+        }
+    }
+
+    protected void createDefaultTopic()
+    {
+        client.topics().create(DEFAULT_TOPIC, 1).execute();
+        final TopologyResponse topology = client.requestTopology().execute();
+
+        defaultPartition = -1;
+        final List<TopicLeader> leaders = topology.getTopicLeaders();
+
+        for (TopicLeader leader : leaders)
+        {
+            if (DEFAULT_TOPIC.equals(leader.getTopicName()))
+            {
+                defaultPartition = leader.getPartitionId();
+            }
+        }
+
+        if (defaultPartition < 0)
+        {
+            throw new RuntimeException("Could not detect leader for default partition");
+        }
     }
 
     @Override
@@ -52,6 +88,16 @@ public class ClientRule extends ExternalResource
     {
         client.close();
         client = null;
+    }
+
+    public String getDefaultTopic()
+    {
+        return DEFAULT_TOPIC;
+    }
+
+    public int getDefaultPartition()
+    {
+        return defaultPartition;
     }
 
 }

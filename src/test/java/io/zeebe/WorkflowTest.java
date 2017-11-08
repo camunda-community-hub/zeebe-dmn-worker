@@ -15,7 +15,7 @@
  */
 package io.zeebe;
 
-import static io.zeebe.fixtures.ZeebeTestRule.DEFAULT_TOPIC;
+import static io.zeebe.fixtures.ClientRule.DEFAULT_TOPIC;
 
 import io.zeebe.client.ZeebeClient;
 import io.zeebe.client.event.ResourceType;
