@@ -15,16 +15,18 @@
  */
 package io.zeebe;
 
-import static io.zeebe.fixtures.ClientRule.DEFAULT_TOPIC;
+import static io.zeebe.test.ClientRule.DEFAULT_TOPIC;
 
 import io.zeebe.client.ZeebeClient;
-import io.zeebe.client.event.ResourceType;
 import io.zeebe.client.event.WorkflowInstanceEvent;
 import io.zeebe.dmn.DmnApplication;
-import io.zeebe.fixtures.ZeebeTestRule;
 import io.zeebe.model.bpmn.Bpmn;
 import io.zeebe.model.bpmn.instance.WorkflowDefinition;
-import org.junit.*;
+import io.zeebe.test.ZeebeTestRule;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 public class WorkflowTest
 {
@@ -56,7 +58,7 @@ public class WorkflowTest
         final String workflowAsString = Bpmn.convertToString(workflowDefinition);
 
         client.workflows().deploy(DEFAULT_TOPIC)
-                .resourceStringUtf8(workflowAsString, ResourceType.BPMN_XML)
+                .addResourceStringUtf8(workflowAsString, "process.bpmn")
                 .execute();
     }
 
@@ -84,7 +86,7 @@ public class WorkflowTest
             .payload("{\"in\": \"foo\"}")
             .execute();
 
-        testRule.waitUntilWorklowInstanceCompleted(workflowInstance.getWorkflowInstanceKey());
+        testRule.waitUntilWorkflowInstanceCompleted(workflowInstance.getWorkflowInstanceKey());
 
         testRule.printWorkflowInstanceEvents(workflowInstance.getWorkflowInstanceKey());
     }
