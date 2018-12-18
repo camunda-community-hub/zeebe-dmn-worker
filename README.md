@@ -37,7 +37,6 @@ You can set the following environment variables to configure the worker.
 
 * `dmn.repo` - default: `dmnrepo`
 * `zeebe.client.broker.contactPoint`- default: `127.0.0.1:26500`
-```
 
 ## Code of Conduct
 
