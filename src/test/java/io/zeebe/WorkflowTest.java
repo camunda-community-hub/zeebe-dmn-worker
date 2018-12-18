@@ -15,80 +15,79 @@
  */
 package io.zeebe;
 
-import static io.zeebe.test.ClientRule.DEFAULT_TOPIC;
-
 import io.zeebe.client.ZeebeClient;
-import io.zeebe.client.event.WorkflowInstanceEvent;
+import io.zeebe.client.api.events.WorkflowInstanceEvent;
 import io.zeebe.dmn.DmnApplication;
 import io.zeebe.model.bpmn.Bpmn;
-import io.zeebe.model.bpmn.instance.WorkflowDefinition;
+import io.zeebe.model.bpmn.BpmnModelInstance;
 import io.zeebe.test.ZeebeTestRule;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class WorkflowTest
-{
-    @Rule
-    public ZeebeTestRule testRule = new ZeebeTestRule();
+public class WorkflowTest {
+  @Rule public ZeebeTestRule testRule = new ZeebeTestRule();
 
-    private ZeebeClient client;
+  private ZeebeClient client;
 
-    private DmnApplication application;
+  private DmnApplication application;
 
-    @Before
-    public void deploy()
-    {
-        client = testRule.getClient();
+  @Before
+  public void deploy() {
+    client = testRule.getClient();
 
-        final WorkflowDefinition workflowDefinition = Bpmn.createExecutableWorkflow("process")
-                .startEvent()
-                .sequenceFlow()
-                .serviceTask("make-decision")
-                    .taskType("DMN")
-                    .taskRetries(3)
-                    .taskHeader("decisionRef", "decision")
-                    .output("$.result", "$.result")
-                    .done()
-                .sequenceFlow()
-                .endEvent()
-                .done();
+    final BpmnModelInstance workflowDefinition =
+        Bpmn.createExecutableProcess("process")
+            .startEvent()
+            .serviceTask("make-decision")
+            .zeebeTaskType("DMN")
+            .zeebeTaskHeader("decisionRef", "decision")
+            .endEvent()
+            .done();
 
-        final String workflowAsString = Bpmn.convertToString(workflowDefinition);
+    client
+        .workflowClient()
+        .newDeployCommand()
+        .addWorkflowModel(workflowDefinition, "process.bpmn")
+        .send()
+        .join();
+  }
 
-        client.workflows().deploy(DEFAULT_TOPIC)
-                .addResourceStringUtf8(workflowAsString, "process.bpmn")
-                .execute();
-    }
+  @Before
+  public void startApp() {
+    final String dmnTestRepo = getClass().getResource("/").getFile();
+    final String contactPoint = testRule.getClient().getConfiguration().getBrokerContactPoint();
 
-    @Before
-    public void startApp()
-    {
-        final String dmnTestRepo = getClass().getResource("/").getFile();
+    application = new DmnApplication(dmnTestRepo, contactPoint);
+    application.start();
+  }
 
-        application = new DmnApplication(dmnTestRepo, DEFAULT_TOPIC);
-        application.start();
-    }
+  @After
+  public void cleanUp() {
+    application.close();
+  }
 
-    @After
-    public void cleanUp()
-    {
-        application.close();
-    }
-
-    @Test
-    public void shouldCompleteWorkflowInstance()
-    {
-        final WorkflowInstanceEvent workflowInstance = client.workflows().create(DEFAULT_TOPIC)
+  @Test
+  public void shouldCompleteWorkflowInstance() {
+    final WorkflowInstanceEvent workflowInstance =
+        client
+            .workflowClient()
+            .newCreateInstanceCommand()
             .bpmnProcessId("process")
             .latestVersion()
             .payload("{\"in\": \"foo\"}")
-            .execute();
+            .send()
+            .join();
 
-        testRule.waitUntilWorkflowInstanceCompleted(workflowInstance.getWorkflowInstanceKey());
+    final List<Map<String, String>> expectedResult =
+        Collections.singletonList(Collections.singletonMap("out", "yeah!"));
 
-        testRule.printWorkflowInstanceEvents(workflowInstance.getWorkflowInstanceKey());
-    }
-
+    ZeebeTestRule.assertThat(workflowInstance)
+        .isEnded()
+        .hasElementPayload("make-decision", "result", expectedResult);
+  }
 }

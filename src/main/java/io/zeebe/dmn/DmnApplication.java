@@ -15,70 +15,68 @@
  */
 package io.zeebe.dmn;
 
-import java.util.Properties;
-
 import io.zeebe.client.ZeebeClient;
+import java.time.Duration;
 import org.camunda.bpm.dmn.engine.DmnEngine;
 import org.camunda.bpm.dmn.engine.DmnEngineConfiguration;
 import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DmnApplication
-{
-    private static final Logger LOG = LoggerFactory.getLogger(DmnApplication.class);
+public class DmnApplication {
+  private static final Logger LOG = LoggerFactory.getLogger(DmnApplication.class);
 
-    private final Properties clientProperties = new Properties();
+  private final String repoDir;
+  private final String contactPoint;
 
-    private final String repoDir;
-    private final String topic;
+  private ZeebeClient client;
 
-    private DmnTaskWorker taskWorker;
-    private ZeebeClient client;
+  public DmnApplication(String repoDir, String contactPoint) {
+    this.repoDir = repoDir;
+    this.contactPoint = contactPoint;
+  }
 
-    public DmnApplication(String repoDir, String topic)
-    {
-        this.repoDir = repoDir;
-        this.topic = topic;
-    }
+  public void start() {
+    client = ZeebeClient.newClientBuilder().brokerContactPoint(contactPoint).build();
 
-    public void start()
-    {
-        client = ZeebeClient.create(clientProperties);
+    LOG.debug("Connected.");
 
-        LOG.debug("Connected.");
+    final DmnJobHandler jobHandler = createJobHandler(client);
 
-        taskWorker = buildTaskWorker(client);
-        taskWorker.open();
+    client
+        .jobClient()
+        .newWorker()
+        .jobType("DMN")
+        .handler(jobHandler)
+        .name("camunda-dmn-worker")
+        .timeout(Duration.ofSeconds(10))
+        .open();
 
-        LOG.debug("Started.");
-    }
+    LOG.debug("Started.");
+  }
 
-    private DmnTaskWorker buildTaskWorker(final ZeebeClient client)
-    {
-        final DmnEngine dmnEngine = buildDmnEngine();
+  private DmnJobHandler createJobHandler(final ZeebeClient client) {
+    final DmnEngine dmnEngine = buildDmnEngine();
 
-        final DmnRepository repository = new DmnRepository(repoDir, dmnEngine);
+    final DmnRepository repository = new DmnRepository(repoDir, dmnEngine);
 
-        return new DmnTaskWorker(client, topic, repository, dmnEngine);
-    }
+    return new DmnJobHandler(repository, dmnEngine);
+  }
 
-    private DmnEngine buildDmnEngine()
-    {
-        final DefaultDmnEngineConfiguration config = (DefaultDmnEngineConfiguration) DmnEngineConfiguration.createDefaultDmnEngineConfiguration();
-        config.setDefaultInputEntryExpressionLanguage("feel-scala-unary-tests");
-        config.setDefaultOutputEntryExpressionLanguage("feel-scala");
-        config.setDefaultInputExpressionExpressionLanguage("feel-scala");
-        config.setDefaultLiteralExpressionLanguage("feel-scala");
-        return config.buildEngine();
-    }
+  private DmnEngine buildDmnEngine() {
+    final DefaultDmnEngineConfiguration config =
+        (DefaultDmnEngineConfiguration)
+            DmnEngineConfiguration.createDefaultDmnEngineConfiguration();
+    config.setDefaultInputEntryExpressionLanguage("feel-scala-unary-tests");
+    config.setDefaultOutputEntryExpressionLanguage("feel-scala");
+    config.setDefaultInputExpressionExpressionLanguage("feel-scala");
+    config.setDefaultLiteralExpressionLanguage("feel-scala");
+    return config.buildEngine();
+  }
 
-    public void close()
-    {
-        taskWorker.close();
-        client.close();
+  public void close() {
+    client.close();
 
-        LOG.debug("Closed.");
-    }
-
+    LOG.debug("Closed.");
+  }
 }

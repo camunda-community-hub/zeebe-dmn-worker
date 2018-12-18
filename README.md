@@ -1,5 +1,5 @@
-# zb-dmn-extension
-Zeebe task worker for DMN. It uses the Camunda DMN engine to evaluate decisions. The decisions are read from local directory.
+# zeebe-dmn-worker
+Zeebe job worker for DMN. It uses the Camunda DMN engine to evaluate decisions. The decisions are read from local directory.
 
 * register for tasks of type 'DMN'
 * required task header 'decisionRef' => id of the decision to evaluate
@@ -29,18 +29,14 @@ Build with Maven
 
 Execute the JAR file via
 
-`java -jar zeebe-dmn.jar`
+`java -jar target/zeebe-dmn-worker.jar`
 
 ## How to configure
 
-You can provide a properties file `application.properties` to configure the Zeebe client and the DMN task worker.
+You can set the following environment variables to configure the worker.
 
-```
-# DMN task worker
-zeebe.dmn.repo=dmn-repo                             # default: repo
-zeebe.dmn.topic=default-topic                       # => default
-# Zeebe Client
-zeebe.client.broker.contactPoint=127.0.0.1:51015    # => default
+* `dmn.repo` - default: `dmnrepo`
+* `zeebe.client.broker.contactPoint`- default: `127.0.0.1:26500`
 ```
 
 ## Code of Conduct

@@ -3,19 +3,23 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<name>Zeebe DMN extension</name>
-	<artifactId>zb-dmn-extension</artifactId>
+	<groupId>io.zeebe</groupId>
+	<artifactId>zeebe-dmn-worker</artifactId>
+	<version>0.2.0</version>
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>io.zeebe</groupId>
-		<artifactId>zb-parent</artifactId>
-		<version>0.3.0</version>
+		<groupId>org.camunda</groupId>
+		<artifactId>camunda-release-parent</artifactId>
+		<version>2.5</version>
+		<!-- do not remove empty tag - http://jira.codehaus.org/browse/MNG-4687 -->
+		<relativePath />
 	</parent>
 
 	<properties>
-		<version.zeebe>0.6.0</version.zeebe>
-		<version.dmn>7.8.0</version.dmn>
-		<version.feel>1.3.0</version.feel>
+		<version.zeebe>0.14.0</version.zeebe>
+		<version.dmn>7.10.0</version.dmn>
+		<version.feel>1.6.0</version.feel>
 	</properties>
 
 	<dependencyManagement>
@@ -52,23 +56,13 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
+			<version>2.11.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>io.zeebe</groupId>
-			<artifactId>zeebe-broker-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>io.zeebe</groupId>
-			<artifactId>zb-bpmn-model</artifactId>
-			<scope>test</scope>
+			<version>2.11.1</version>
 		</dependency>
 
 		<dependency>
@@ -81,12 +75,14 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
+			<version>4.12</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
 			<scope>test</scope>
+			<version>3.11.1</version>
 		</dependency>
 
 	</dependencies>
@@ -112,7 +108,7 @@
 			              <mainClass>io.zeebe.dmn.StandaloneDmnApplication</mainClass>
 			            </manifest>
 			          </archive>
-	          		<finalName>zeebe-dmn</finalName>
+	          		<finalName>zeebe-dmn-worker</finalName>
   					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 				<executions>

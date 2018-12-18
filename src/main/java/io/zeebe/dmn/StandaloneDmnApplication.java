@@ -15,76 +15,29 @@
  */
 package io.zeebe.dmn;
 
-import java.io.*;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public class StandaloneDmnApplication {
 
-public class StandaloneDmnApplication
-{
-    private static final Logger LOG = LoggerFactory.getLogger(StandaloneDmnApplication.class);
+  public static final String ENV_CONTACT_POINT = "zeebe.client.broker.contactPoint";
+  public static final String ENV_REPOSITORY = "dmn.repo";
 
-    public static final String PROP_FILE = "application.properties";
+  private static final String DEFAULT_REPO_DIR = "dmn-repo";
+  private static final String DEFAULT_CONTACT_POINT = "127.0.0.1:26500";
 
-    public static final String REPO_DIR_PROP = "zeebe.dmn.repo";
-    public static final String TOPIC_PROP = "zeebe.dmn.topic";
+  public static void main(String[] args) {
+    final String repoDir =
+        Optional.ofNullable(System.getenv(ENV_REPOSITORY)).orElse(DEFAULT_REPO_DIR);
+    final String contractPoint =
+        Optional.ofNullable(System.getenv(ENV_CONTACT_POINT)).orElse(DEFAULT_CONTACT_POINT);
 
-    private static final String DEFAULT_REPO_DIR = "repo";
-    private static final String DEFAULT_TOPIC = "default-topic";
+    final DmnApplication application = new DmnApplication(repoDir, contractPoint);
+    application.start();
 
-    public static void main(String[] args)
-    {
-        final Properties properties = loadProperties();
-
-        final String repoDir = properties.getProperty(REPO_DIR_PROP, DEFAULT_REPO_DIR);
-        final String topic = properties.getProperty(TOPIC_PROP, DEFAULT_TOPIC);
-
-        final DmnApplication application = new DmnApplication(repoDir, topic);
-        application.start();
-
-        waitUntilClose();
-
-        application.close();
+    try {
+      new CountDownLatch(1).await();
+    } catch (InterruptedException e) {
     }
-
-    private static Properties loadProperties()
-    {
-        final Properties properties = new Properties();
-
-        try
-        {
-            final File propertyFile = new File(PROP_FILE);
-            if (propertyFile.exists())
-            {
-                properties.load(new FileInputStream(propertyFile));
-            }
-            else
-            {
-                LOG.debug("No configuration found '{}'. Use default values.", PROP_FILE);
-            }
-        }
-        catch (IOException e)
-        {
-            LOG.warn("Failed to read properties '{}'.", PROP_FILE, e);
-        }
-        return properties;
-    }
-
-    private static void waitUntilClose()
-    {
-        try (Scanner scanner = new Scanner(System.in))
-        {
-            while (scanner.hasNextLine())
-            {
-                final String nextLine = scanner.nextLine();
-                if (nextLine.contains("close"))
-                {
-                    return;
-                }
-            }
-        }
-    }
-
+  }
 }
