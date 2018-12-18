@@ -19,7 +19,15 @@
 	<properties>
 		<version.zeebe>0.14.0</version.zeebe>
 		<version.dmn>7.10.0</version.dmn>
-		<version.feel>1.6.0</version.feel>
+        <version.feel>1.6.0</version.feel>
+
+		<!-- release parent settings -->
+		<version.java>1.8</version.java>
+		<nexus.snapshot.repository>https://app.camunda.com/nexus/content/repositories/zeebe-io-snapshots/</nexus.snapshot.repository>
+		<nexus.release.repository>https://app.camunda.com/nexus/content/repositories/zeebe-io/</nexus.release.repository>
+
+		<!-- disable jdk8 javadoc checks on release build -->
+		<additionalparam>-Xdoclint:none</additionalparam>
 	</properties>
 
 	<dependencyManagement>
@@ -122,6 +130,39 @@
 				</executions>
 			</plugin>
 		</plugins>
-	</build>
+    </build>
+
+    <repositories>
+		<repository>
+			<id>zeebe</id>
+			<name>zeebe repository</name>
+			<url>https://app.camunda.com/nexus/content/repositories/zeebe-io/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>zeebe-snapshots</id>
+			<name>zeebe snapshot repository</name>
+			<url>https://app.camunda.com/nexus/content/repositories/zeebe-io-snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<scm>
+		<url>https://github.com/zeebe-io/zeebe-dmn-worker</url>
+		<connection>scm:git:git@github.com:zeebe-io/zeebe-dmn-worker.git</connection>
+		<developerConnection>scm:git:git@github.com:zeebe-io/zeebe-dmn-worker.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
 
 </project>
