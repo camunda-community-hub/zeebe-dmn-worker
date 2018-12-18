@@ -35,7 +35,7 @@ Execute the JAR file via
 
 You can set the following environment variables to configure the worker.
 
-* `dmn.repo` - default: `dmnrepo`
+* `dmn.repo` - default: `dmn-repo`
 * `zeebe.client.broker.contactPoint`- default: `127.0.0.1:26500`
 
 ## Code of Conduct
