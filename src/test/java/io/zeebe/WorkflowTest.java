@@ -50,7 +50,6 @@ public class WorkflowTest {
             .done();
 
     client
-        .workflowClient()
         .newDeployCommand()
         .addWorkflowModel(workflowDefinition, "process.bpmn")
         .send()
@@ -75,7 +74,6 @@ public class WorkflowTest {
   public void shouldCompleteWorkflowInstance() {
     final WorkflowInstanceEvent workflowInstance =
         client
-            .workflowClient()
             .newCreateInstanceCommand()
             .bpmnProcessId("process")
             .latestVersion()

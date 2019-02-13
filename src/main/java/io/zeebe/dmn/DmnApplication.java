@@ -44,7 +44,6 @@ public class DmnApplication {
     final DmnJobHandler jobHandler = createJobHandler(client);
 
     client
-        .jobClient()
         .newWorker()
         .jobType("DMN")
         .handler(jobHandler)
