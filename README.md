@@ -2,11 +2,6 @@
 
 A Zeebe worker to evaluate DMN decisions (i.e. business rule tasks). It uses the Camunda DMN engine for evaluation and a local directory to read the decisions from.
 
-* the worker is registered for the type `DMN`
-* required custom headers:
-    * `decisionRef` - the id of the decision to evaluate
-* the result of the evaluation is passed as `result` variable
-
 ## Usage
 
 Example BPMN with service task:
@@ -24,6 +19,11 @@ Example BPMN with service task:
   </bpmn:extensionElements>
 </bpmn:serviceTask>
 ```
+
+* the worker is registered for the type `DMN`
+* required custom headers:
+    * `decisionRef` - the id of the decision to evaluate
+* the result of the evaluation is passed as `result` variable
 
 ## Install
 
