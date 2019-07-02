@@ -16,7 +16,7 @@
 package io.zeebe;
 
 import io.zeebe.client.ZeebeClient;
-import io.zeebe.client.api.events.WorkflowInstanceEvent;
+import io.zeebe.client.api.response.WorkflowInstanceEvent;
 import io.zeebe.dmn.DmnApplication;
 import io.zeebe.model.bpmn.Bpmn;
 import io.zeebe.model.bpmn.BpmnModelInstance;
@@ -49,11 +49,7 @@ public class WorkflowTest {
             .endEvent()
             .done();
 
-    client
-        .newDeployCommand()
-        .addWorkflowModel(workflowDefinition, "process.bpmn")
-        .send()
-        .join();
+    client.newDeployCommand().addWorkflowModel(workflowDefinition, "process.bpmn").send().join();
   }
 
   @Before
@@ -77,15 +73,13 @@ public class WorkflowTest {
             .newCreateInstanceCommand()
             .bpmnProcessId("process")
             .latestVersion()
-            .payload("{\"in\": \"foo\"}")
+            .variables(Collections.singletonMap("in", "foo"))
             .send()
             .join();
 
     final List<Map<String, String>> expectedResult =
         Collections.singletonList(Collections.singletonMap("out", "yeah!"));
 
-    ZeebeTestRule.assertThat(workflowInstance)
-        .isEnded()
-        .hasElementPayload("make-decision", "result", expectedResult);
+    ZeebeTestRule.assertThat(workflowInstance).isEnded().hasVariables("result", expectedResult);
   }
 }

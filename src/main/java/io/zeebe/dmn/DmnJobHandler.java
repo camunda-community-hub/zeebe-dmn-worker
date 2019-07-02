@@ -15,16 +15,19 @@
  */
 package io.zeebe.dmn;
 
-import io.zeebe.client.api.clients.JobClient;
 import io.zeebe.client.api.response.ActivatedJob;
-import io.zeebe.client.api.subscription.JobHandler;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
+
+import io.zeebe.client.api.worker.JobClient;
+import io.zeebe.client.api.worker.JobHandler;
 import org.camunda.bpm.dmn.engine.DmnDecision;
 import org.camunda.bpm.dmn.engine.DmnDecisionResult;
 import org.camunda.bpm.dmn.engine.DmnEngine;
 
 public class DmnJobHandler implements JobHandler {
+
   private static final String DECISION_ID_HEADER = "decisionRef";
 
   private final DmnRepository repository;
@@ -37,19 +40,21 @@ public class DmnJobHandler implements JobHandler {
 
   @Override
   public void handle(JobClient client, ActivatedJob job) {
-    final DmnDecision decision = findDecisionForTask(job);
-    final Map<String, Object> payload = job.getPayloadAsMap();
 
-    final DmnDecisionResult decisionResult = dmnEngine.evaluateDecision(decision, payload);
+    final DmnDecision decision = findDecisionForTask(job);
+    final Map<String, Object> variables = job.getVariablesAsMap();
+
+    final DmnDecisionResult decisionResult = dmnEngine.evaluateDecision(decision, variables);
 
     client
         .newCompleteCommand(job.getKey())
-        .payload(Collections.singletonMap("result", decisionResult))
+        .variables(Collections.singletonMap("result", decisionResult))
         .send();
   }
 
   private DmnDecision findDecisionForTask(ActivatedJob job) {
-    final String decisionId = (String) job.getCustomHeaders().get(DECISION_ID_HEADER);
+
+    final String decisionId = job.getCustomHeaders().get(DECISION_ID_HEADER);
     if (decisionId == null || decisionId.isEmpty()) {
       throw new RuntimeException(String.format("Missing header: '%d'", DECISION_ID_HEADER));
     }
