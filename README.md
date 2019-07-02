@@ -9,6 +9,8 @@ A Zeebe worker to evaluate DMN decisions (i.e. business rule tasks). It uses the
 
 ## Usage
 
+Example BPMN with service task:
+
 ```xml
 <bpmn:serviceTask id="decisionTask" name="Eval DMN decision">
   <bpmn:extensionElements>
