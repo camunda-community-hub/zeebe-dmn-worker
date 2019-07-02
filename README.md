@@ -1,9 +1,13 @@
 # zeebe-dmn-worker
-Zeebe job worker for DMN. It uses the Camunda DMN engine to evaluate decisions. The decisions are read from local directory.
 
-* register for tasks of type 'DMN'
-* required task header 'decisionRef' => id of the decision to evaluate
-* completes task with payload 'result' which contains the complete decision result
+A Zeebe worker to evaluate DMN decisions (i.e. business rule tasks). It uses the Camunda DMN engine for evaluation and a local directory to read the decisions from.
+
+* the worker is registered for the type `DMN`
+* required custom headers:
+    * `decisionRef` - the id of the decision to evaluate
+* the result of the evaluation is passed as `result` variable
+
+## Usage
 
 ```xml
 <bpmn:serviceTask id="decisionTask" name="Eval DMN decision">
@@ -19,24 +23,25 @@ Zeebe job worker for DMN. It uses the Camunda DMN engine to evaluate decisions. 
 </bpmn:serviceTask>
 ```
 
-## How to build
+## Install
 
+1) Download the [JAR file](https://github.com/zeebe-io/zeebe-dmn-worker/releases)
+
+2) Execute the JAR file via
+
+    `java -jar target/zeebe-dmn-worker.jar`
+
+### Configuration
+
+The connection can be changed by setting the environment variables:
+* `dmn.repo` (default: `dmn-repo`)
+* `zeebe.client.broker.contactPoint` (default: `127.0.0.1:26500`)
+
+## Build from Source
+   
 Build with Maven
 
 `mvn clean install`
-
-## How to run
-
-Execute the JAR file via
-
-`java -jar target/zeebe-dmn-worker.jar`
-
-## How to configure
-
-You can set the following environment variables to configure the worker.
-
-* `dmn.repo` - default: `dmn-repo`
-* `zeebe.client.broker.contactPoint`- default: `127.0.0.1:26500`
 
 ## Code of Conduct
 
