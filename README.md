@@ -31,7 +31,7 @@ Example BPMN with service task:
 
 2) Execute the JAR file via
 
-    `java -jar target/zeebe-dmn-worker.jar`
+    `java -jar target/zeebe-dmn-worker-{VERSION}.jar`
 
 ### Configuration
 

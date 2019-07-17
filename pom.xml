@@ -115,7 +115,7 @@
 			              <mainClass>io.zeebe.dmn.StandaloneDmnApplication</mainClass>
 			            </manifest>
 			          </archive>
-	          		<finalName>zeebe-dmn-worker</finalName>
+					<finalName>${project.artifactId}-${project.version}</finalName>
   					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 				<executions>
