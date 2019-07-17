@@ -80,6 +80,6 @@ public class WorkflowTest {
     final List<Map<String, String>> expectedResult =
         Collections.singletonList(Collections.singletonMap("out", "yeah!"));
 
-    ZeebeTestRule.assertThat(workflowInstance).isEnded().hasVariables("result", expectedResult);
+    ZeebeTestRule.assertThat(workflowInstance).isEnded().hasVariable("result", expectedResult);
   }
 }
