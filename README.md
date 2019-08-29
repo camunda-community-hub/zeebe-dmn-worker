@@ -14,7 +14,7 @@ Example BPMN with service task:
       <zeebe:header key="decisionRef" value="dish-decision" />
     </zeebe:taskHeaders>
     <zeebe:ioMapping>
-      <zeebe:output source="$.result" target="$.decisionResult" />
+      <zeebe:output source="result" target="decisionResult" />
     </zeebe:ioMapping>
   </bpmn:extensionElements>
 </bpmn:serviceTask>
