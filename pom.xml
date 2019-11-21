@@ -18,7 +18,7 @@
 	<properties>
 		<version.zeebe>0.20.0</version.zeebe>
 		<version.dmn>7.11.0</version.dmn>
-        <version.feel>1.8.0</version.feel>
+        <version.feel>1.9.0</version.feel>
 
 		<!-- release parent settings -->
 		<version.java>1.8</version.java>
