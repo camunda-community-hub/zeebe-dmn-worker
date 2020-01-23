@@ -1,5 +1,7 @@
 # zeebe-dmn-worker
 
+!TEST!
+
 A Zeebe worker to evaluate DMN decisions (i.e. business rule tasks). It uses the Camunda DMN engine for evaluation and a local directory to read the decisions from.
 
 ## Usage
