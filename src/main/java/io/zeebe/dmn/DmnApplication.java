@@ -37,7 +37,7 @@ public class DmnApplication {
   }
 
   public void start() {
-    client = ZeebeClient.newClientBuilder().brokerContactPoint(contactPoint).build();
+    client = ZeebeClient.newClientBuilder().brokerContactPoint(contactPoint).usePlaintext().build();
 
     LOG.debug("Connected.");
 

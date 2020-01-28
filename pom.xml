@@ -1,198 +1,210 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
-	<name>Zeebe DMN extension</name>
-	<groupId>io.zeebe</groupId>
-	<artifactId>zeebe-dmn-worker</artifactId>
-	<version>0.5.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+  <modelVersion>4.0.0</modelVersion>
+  <name>Zeebe DMN extension</name>
+  <groupId>io.zeebe</groupId>
+  <artifactId>zeebe-dmn-worker</artifactId>
+  <version>0.5.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
-	<parent>
-		<groupId>org.camunda</groupId>
-		<artifactId>camunda-release-parent</artifactId>
-		<version>3.7</version>
-		<!-- do not remove empty tag - http://jira.codehaus.org/browse/MNG-4687 -->
-		<relativePath />
-	</parent>
+  <parent>
+    <groupId>org.camunda</groupId>
+    <artifactId>camunda-release-parent</artifactId>
+    <version>3.7</version>
+    <!-- do not remove empty tag - http://jira.codehaus.org/browse/MNG-4687 -->
+    <relativePath/>
+  </parent>
 
-	<properties>
-		<version.zeebe>0.22.1</version.zeebe>
-		<version.dmn>7.11.0</version.dmn>
-        <version.feel>1.10.0</version.feel>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.zeebe</groupId>
+        <artifactId>zeebe-bom</artifactId>
+        <version>${version.zeebe}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
-		<!-- release parent settings -->
-		<version.java>1.8</version.java>
-		<nexus.snapshot.repository>https://app.camunda.com/nexus/content/repositories/zeebe-io-snapshots/</nexus.snapshot.repository>
-		<nexus.release.repository>https://app.camunda.com/nexus/content/repositories/zeebe-io/</nexus.release.repository>
+  <properties>
+    <version.zeebe>0.22.1</version.zeebe>
+    <version.dmn>7.11.0</version.dmn>
+    <version.feel>1.10.0</version.feel>
 
-		<!-- disable jdk8 javadoc checks on release build -->
-		<additionalparam>-Xdoclint:none</additionalparam>
-	</properties>
+    <!-- release parent settings -->
+    <version.java>11</version.java>
+    <nexus.snapshot.repository>
+      https://app.camunda.com/nexus/content/repositories/zeebe-io-snapshots/
+    </nexus.snapshot.repository>
+    <nexus.release.repository>https://app.camunda.com/nexus/content/repositories/zeebe-io/
+    </nexus.release.repository>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>io.zeebe</groupId>
-				<artifactId>zeebe-bom</artifactId>
-				<version>${version.zeebe}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+    <!-- disable jdk8 javadoc checks on release build -->
+    <additionalparam>-Xdoclint:none</additionalparam>
+  </properties>
 
-	<dependencies>
+  <dependencies>
 
-		<dependency>
-			<groupId>io.zeebe</groupId>
-			<artifactId>zeebe-client-java</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>io.zeebe</groupId>
+      <artifactId>zeebe-client-java</artifactId>
+    </dependency>
 
-		<dependency>
-			<groupId>org.camunda.bpm.dmn</groupId>
-			<artifactId>camunda-engine-dmn</artifactId>
-			<version>${version.dmn}</version>
-		</dependency>
+    <dependency>
+      <groupId>org.camunda.bpm.dmn</groupId>
+      <artifactId>camunda-engine-dmn</artifactId>
+      <version>${version.dmn}</version>
+    </dependency>
 
-		<dependency>
-		  <groupId>org.camunda.bpm.extension.feel.scala</groupId>
-		  <artifactId>feel-engine</artifactId>
-		  <version>${version.feel}</version>
-		</dependency>
+    <dependency>
+      <groupId>org.camunda.bpm.extension.feel.scala</groupId>
+      <artifactId>feel-engine</artifactId>
+      <version>${version.feel}</version>
+    </dependency>
 
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.13.0</version>
-		</dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.13.0</version>
+    </dependency>
 
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>2.13.0</version>
-		</dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>2.13.0</version>
+    </dependency>
 
-		<dependency>
-			<groupId>io.zeebe</groupId>
-			<artifactId>zeebe-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+    <dependency>
+      <groupId>io.zeebe</groupId>
+      <artifactId>zeebe-test</artifactId>
+      <scope>test</scope>
+    </dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-			<version>4.13</version>
-		</dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+      <version>4.13</version>
+    </dependency>
 
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<scope>test</scope>
-			<version>3.14.0</version>
-		</dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+      <version>3.14.0</version>
+    </dependency>
 
-	</dependencies>
+  </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-			            <manifest>
-			              <mainClass>io.zeebe.dmn.StandaloneDmnApplication</mainClass>
-			            </manifest>
-			          </archive>
-					<finalName>${project.artifactId}-${project.version}</finalName>
-  					<appendAssemblyId>false</appendAssemblyId>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-    </build>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>io.zeebe.dmn.StandaloneDmnApplication</mainClass>
+            </manifest>
+          </archive>
+          <finalName>${project.artifactId}-${project.version}</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <!-- Override java source version to workaround javadoc bug https://bugs.openjdk.java.net/browse/JDK-8212233 -->
+          <source>8</source>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
-	<profiles>
-		<profile>
-			<id>release</id>
-			<properties>
-				<plugin.version.gpg>1.6</plugin.version.gpg>
-				<gpg.passphrase>${env.GPG_PASS}</gpg.passphrase>
-				<resume>false</resume>
-				<tag>${env.RELEASE_VERSION}</tag>
-				<releaseVersion>${env.RELEASE_VERSION}</releaseVersion>
-				<developmentVersion>${env.DEVELOPMENT_VERSION}</developmentVersion>
-				<arguments>-DskipTests</arguments>
-			</properties>
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-gpg-plugin</artifactId>
-							<configuration>
-								<gpgArguments>
-									<arg>--pinentry-mode</arg>
-									<arg>loopback</arg>
-								</gpgArguments>
-							</configuration>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
-	</profiles>
+  <profiles>
+    <profile>
+      <id>release</id>
+      <properties>
+        <plugin.version.gpg>1.6</plugin.version.gpg>
+        <gpg.passphrase>${env.GPG_PASS}</gpg.passphrase>
+        <resume>false</resume>
+        <tag>${env.RELEASE_VERSION}</tag>
+        <releaseVersion>${env.RELEASE_VERSION}</releaseVersion>
+        <developmentVersion>${env.DEVELOPMENT_VERSION}</developmentVersion>
+        <arguments>-DskipTests</arguments>
+      </properties>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-gpg-plugin</artifactId>
+              <configuration>
+                <gpgArguments>
+                  <arg>--pinentry-mode</arg>
+                  <arg>loopback</arg>
+                </gpgArguments>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
 
-    <repositories>
-		<repository>
-			<id>zeebe</id>
-			<name>zeebe repository</name>
-			<url>https://app.camunda.com/nexus/content/repositories/zeebe-io/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
+  <repositories>
+    <repository>
+      <id>zeebe</id>
+      <name>zeebe repository</name>
+      <url>https://app.camunda.com/nexus/content/repositories/zeebe-io/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
 
-		<repository>
-			<id>zeebe-snapshots</id>
-			<name>zeebe snapshot repository</name>
-			<url>https://app.camunda.com/nexus/content/repositories/zeebe-io-snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
+    <repository>
+      <id>zeebe-snapshots</id>
+      <name>zeebe snapshot repository</name>
+      <url>https://app.camunda.com/nexus/content/repositories/zeebe-io-snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
-	<scm>
-		<url>https://github.com/zeebe-io/zeebe-dmn-worker</url>
-		<connection>scm:git:git@github.com:zeebe-io/zeebe-dmn-worker.git</connection>
-		<developerConnection>scm:git:git@github.com:zeebe-io/zeebe-dmn-worker.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
+  <scm>
+    <url>https://github.com/zeebe-io/zeebe-dmn-worker</url>
+    <connection>scm:git:git@github.com:zeebe-io/zeebe-dmn-worker.git</connection>
+    <developerConnection>scm:git:git@github.com:zeebe-io/zeebe-dmn-worker.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 
 </project>
