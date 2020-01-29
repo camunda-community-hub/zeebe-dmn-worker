@@ -31,7 +31,7 @@
 
   <properties>
     <version.zeebe>0.22.1</version.zeebe>
-    <version.dmn>7.11.0</version.dmn>
+    <version.dmn>7.12.0</version.dmn>
     <version.feel>1.10.0</version.feel>
 
     <!-- release parent settings -->
