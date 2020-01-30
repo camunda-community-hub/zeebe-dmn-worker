@@ -32,7 +32,7 @@
   <properties>
     <version.zeebe>0.22.1</version.zeebe>
     <version.dmn>7.12.0</version.dmn>
-    <version.feel>1.10.0</version.feel>
+    <version.feel>1.10.1</version.feel>
 
     <!-- release parent settings -->
     <version.java>11</version.java>
