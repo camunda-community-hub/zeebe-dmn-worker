@@ -164,7 +164,7 @@
         <version>2.1.0</version>
         <configuration>
           <to>
-            <image>docker.io/camunda/zeebe-script-worker</image>
+            <image>docker.io/camunda/zeebe-dmn-worker</image>
           </to>
         </configuration>
       </plugin>
