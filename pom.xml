@@ -61,8 +61,10 @@
     <nexus.release.repository>https://app.camunda.com/nexus/content/repositories/zeebe-io/
     </nexus.release.repository>
 
+    <plugin.version.javadoc>3.1.1</plugin.version.javadoc>
     <!-- disable jdk8 javadoc checks on release build -->
     <additionalparam>-Xdoclint:none</additionalparam>
+
   </properties>
 
   <dependencies>
