@@ -13,33 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.zeebe;
+package io.zeebe.dmn;
 
-import io.zeebe.client.ZeebeClient;
 import io.zeebe.client.api.response.WorkflowInstanceEvent;
-import io.zeebe.dmn.DmnApplication;
 import io.zeebe.model.bpmn.Bpmn;
 import io.zeebe.model.bpmn.BpmnModelInstance;
 import io.zeebe.test.ZeebeTestRule;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(properties = {"zeebe.worker.dmn.repository=src/test/resources"})
 public class WorkflowTest {
-  @Rule public ZeebeTestRule testRule = new ZeebeTestRule();
 
-  private ZeebeClient client;
+  @ClassRule public static final ZeebeTestRule TEST_RULE = new ZeebeTestRule();
 
-  private DmnApplication application;
+  @BeforeClass
+  public static void init() {
+    System.setProperty(
+        "zeebe.client.broker.contactPoint",
+        TEST_RULE.getClient().getConfiguration().getBrokerContactPoint());
+  }
 
   @Before
   public void deploy() {
-    client = testRule.getClient();
-
     final BpmnModelInstance workflowDefinition =
         Bpmn.createExecutableProcess("process")
             .startEvent()
@@ -49,27 +54,19 @@ public class WorkflowTest {
             .endEvent()
             .done();
 
-    client.newDeployCommand().addWorkflowModel(workflowDefinition, "process.bpmn").send().join();
-  }
-
-  @Before
-  public void startApp() {
-    final String dmnTestRepo = getClass().getResource("/").getFile();
-    final String contactPoint = testRule.getClient().getConfiguration().getBrokerContactPoint();
-
-    application = new DmnApplication(dmnTestRepo, contactPoint);
-    application.start();
-  }
-
-  @After
-  public void cleanUp() {
-    application.close();
+    TEST_RULE
+        .getClient()
+        .newDeployCommand()
+        .addWorkflowModel(workflowDefinition, "process.bpmn")
+        .send()
+        .join();
   }
 
   @Test
   public void shouldCompleteWorkflowInstance() {
     final WorkflowInstanceEvent workflowInstance =
-        client
+        TEST_RULE
+            .getClient()
             .newCreateInstanceCommand()
             .bpmnProcessId("process")
             .latestVersion()

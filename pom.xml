@@ -19,6 +19,7 @@
 
   <dependencyManagement>
     <dependencies>
+
       <dependency>
         <groupId>io.zeebe</groupId>
         <artifactId>zeebe-bom</artifactId>
@@ -26,13 +27,26 @@
         <scope>import</scope>
         <type>pom</type>
       </dependency>
+
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${version.spring.boot}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 
   <properties>
     <version.zeebe>0.23.0</version.zeebe>
+    <version.zeebe.spring>0.22.0</version.zeebe.spring>
+
     <version.dmn>7.12.0</version.dmn>
     <version.feel>1.11.0</version.feel>
+
+    <version.spring.boot>2.2.6.RELEASE</version.spring.boot>
 
     <!-- release parent settings -->
     <version.java>11</version.java>
@@ -48,9 +62,38 @@
 
   <dependencies>
 
+    <!-- spring deps-->
     <dependency>
-      <groupId>io.zeebe</groupId>
-      <artifactId>zeebe-client-java</artifactId>
+      <groupId>io.zeebe.spring</groupId>
+      <artifactId>spring-zeebe-starter</artifactId>
+      <version>${version.zeebe.spring}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mustache</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.junit.vintage</groupId>
+          <artifactId>junit-vintage-engine</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -63,18 +106,6 @@
       <groupId>org.camunda.feel</groupId>
       <artifactId>feel-engine</artifactId>
       <version>${version.feel}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>2.13.1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j-impl</artifactId>
-      <version>2.13.1</version>
     </dependency>
 
     <dependency>
@@ -101,6 +132,7 @@
 
   <build>
     <plugins>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -109,37 +141,38 @@
           <target>1.8</target>
         </configuration>
       </plugin>
+
       <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-          <archive>
-            <manifest>
-              <mainClass>io.zeebe.dmn.StandaloneDmnApplication</mainClass>
-            </manifest>
-          </archive>
-          <finalName>${project.artifactId}-${project.version}</finalName>
-          <appendAssemblyId>false</appendAssemblyId>
+          <source>${version.java}</source>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
             <goals>
-              <goal>single</goal>
+              <goal>repackage</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
+
       <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>2.1.0</version>
         <configuration>
-          <!-- Override java source version to workaround javadoc bug https://bugs.openjdk.java.net/browse/JDK-8212233 -->
-          <source>8</source>
+          <to>
+            <image>docker.io/camunda/zeebe-script-worker</image>
+          </to>
         </configuration>
       </plugin>
+
     </plugins>
   </build>
 
