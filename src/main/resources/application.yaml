@@ -1,0 +1,19 @@
+zeebe:
+
+  worker:
+    defaultName: camunda-dmn-worker
+    defaultType: DMN
+    threads: 3
+
+    dmn.repository: dmn-repo
+
+  client:
+    job.timeout: 10000
+    broker.contactPoint: 127.0.0.1:26500
+    security.plaintext: true
+
+logging:
+  level:
+    root: ERROR
+    io.zeebe: INFO
+    io.zeebe.dmn: DEBUG

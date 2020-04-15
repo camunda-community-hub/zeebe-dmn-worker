@@ -16,16 +16,18 @@
 package io.zeebe.dmn;
 
 import io.zeebe.client.api.response.ActivatedJob;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-
 import io.zeebe.client.api.worker.JobClient;
 import io.zeebe.client.api.worker.JobHandler;
+import io.zeebe.spring.client.annotation.ZeebeWorker;
+import java.util.Collections;
+import java.util.Map;
 import org.camunda.bpm.dmn.engine.DmnDecision;
 import org.camunda.bpm.dmn.engine.DmnDecisionResult;
 import org.camunda.bpm.dmn.engine.DmnEngine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DmnJobHandler implements JobHandler {
 
   private static final String DECISION_ID_HEADER = "decisionRef";
@@ -33,12 +35,14 @@ public class DmnJobHandler implements JobHandler {
   private final DmnRepository repository;
   private final DmnEngine dmnEngine;
 
+  @Autowired
   public DmnJobHandler(DmnRepository repository, DmnEngine dmnEngine) {
     this.repository = repository;
     this.dmnEngine = dmnEngine;
   }
 
   @Override
+  @ZeebeWorker
   public void handle(JobClient client, ActivatedJob job) {
 
     final DmnDecision decision = findDecisionForTask(job);
