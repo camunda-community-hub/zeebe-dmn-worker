@@ -50,6 +50,11 @@
 
     <!-- release parent settings -->
     <version.java>11</version.java>
+    <java.version>${version.java}</java.version>
+
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+
     <nexus.snapshot.repository>
       https://app.camunda.com/nexus/content/repositories/zeebe-io-snapshots/
     </nexus.snapshot.repository>
@@ -132,15 +137,6 @@
 
   <build>
     <plugins>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
