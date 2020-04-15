@@ -44,7 +44,7 @@ public class WorkflowTest {
         Bpmn.createExecutableProcess("process")
             .startEvent()
             .serviceTask("make-decision")
-            .zeebeTaskType("DMN")
+            .zeebeJobType("DMN")
             .zeebeTaskHeader("decisionRef", "decision")
             .endEvent()
             .done();
