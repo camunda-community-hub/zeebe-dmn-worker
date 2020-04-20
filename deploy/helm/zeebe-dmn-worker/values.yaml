@@ -21,6 +21,51 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name:
 
+service:
+  type: ClusterIP
+  ports: []
+    # - type: ClusterIP
+    #   port: 80
+    #   targetPort: http
+    #   name: http
+    #   protocol: TCP
+
+ports: []
+  # - name: http
+  #   containerPort: 80
+  #   protocol: TCP
+
+probes: {}
+  # livenessProbe:
+  #   httpGet:
+  #     path: /
+  #     port: http
+  # readinessProbe:
+  #   httpGet:
+  #     path: /
+  #     port: http
+
+command: []
+
+args: []
+
+additionalEnv: []
+
+additionalLabels: []
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
 podSecurityContext: {}
   # fsGroup: 2000
 
@@ -51,5 +96,17 @@ tolerations: []
 affinity: {}
 
 global:
-  zeebe: "{{ .Release.Name }}-zeebe-gateway:26500" # the zeebe service instance where operate will connect
-  dmnRepostiory: "/usr/share/zeebe/dmn-repo"
+  dmnRepository:
+    path: "/usr/share/zeebe/dmn-repo"
+    volumeClaim: {}
+    volumeMount: {}
+
+  brokerContactPoint: "zeebe-gateway:26500"
+
+# https://github.com/zeebe-io/zeebe-dmn-worker#configuration
+config: |
+  zeebe:
+    worker:
+      dmn.repository: {{ .Values.global.dmnRepository.path }}
+    client:
+      broker.contactPoint: {{ .Values.global.brokerContactPoint }}

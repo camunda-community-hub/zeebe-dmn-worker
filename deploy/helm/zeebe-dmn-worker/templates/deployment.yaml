@@ -4,7 +4,6 @@ metadata:
   name: {{ include "chart.fullname" . }}
   labels:
     {{- include "chart.labels" . | nindent 4 }}
-    zeebe-gateway-client: "true"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -14,7 +13,9 @@ spec:
     metadata:
       labels:
         {{- include "chart.selectorLabels" . | nindent 8 }}
-        zeebe-gateway-client: "true"
+      {{- with .Values.additionalLabels }}
+        {{- toYaml . | nindent 8}}
+      {{- end }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -29,24 +30,42 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.command }}
+          {{- with .Values.command }}
           command:
-            {{- toYaml .Values.command | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if .Values.args }}
+          {{- with .Values.args }}
           args:
-            {{- toYaml .Values.args | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with .Values.additionalEnv }}
           env:
-            - name: "zeebe.client.broker.contactPoint"
-              value: {{ tpl .Values.global.zeebe . | quote }}
-            - name: "zeebe.worker.dmn.repository"
-              value: {{ .Values.global.dmnRepostiory | quote }}
-          {{- if .Values.additionalEnv }}
-            {{- toYaml .Values.additionalEnv | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{ with .Values.ports }}
+          ports:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{ with .Values.probes }}
+          {{- toYaml . | nindent 10 }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /app/resources/application.yml
+              subPath: application.yml
+            {{- with .Values.global.dmnRepository.volumeMount }}
+              {{ toYaml . | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "chart.fullname" . }}
+            defaultMode: 0744
+        {{- with .Values.global.dmnRepository.volumeClaim }}
+          {{ toYaml . | nindent 8 }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
