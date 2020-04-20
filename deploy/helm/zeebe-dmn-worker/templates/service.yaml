@@ -1,14 +1,14 @@
+{{- with .Values.ports }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "chart.fullname" . }}
+  name: {{ include "chart.fullname" $ }}
   labels:
-    {{- include "chart.labels" . | nindent 4 }}
+    {{- include "chart.labels" $ | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
-  {{ with .Values.service.ports }}
+  type: {{ $.Values.service.type }}
   ports:
     {{ toYaml . | nindent 4 }}
-  {{- end }}
   selector:
-    {{- include "chart.selectorLabels" . | nindent 4 }}
+    {{- include "chart.selectorLabels" $ | nindent 4 }}
+{{- end }}
