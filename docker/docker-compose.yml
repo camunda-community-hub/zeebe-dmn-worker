@@ -20,7 +20,7 @@ services:
     image: camunda/zeebe-dmn-worker:latest
     environment:
       - zeebe.client.broker.contactPoint=zeebe:26500
-      - zeebe.worker.dmn.repository=/usr/share/zeebe/dmn-repo
+      - zeebe.client.worker.dmn.repository=/usr/share/zeebe/dmn-repo
     volumes:
       - ./dmn-repo:/usr/share/zeebe/dmn-repo
     depends_on:

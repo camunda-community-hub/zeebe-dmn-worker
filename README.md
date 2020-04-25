@@ -35,7 +35,7 @@ The docker image for the worker is published to [DockerHub](https://hub.docker.c
 docker pull camunda/zeebe-dmn-worker:latest
 ```
 * configure the connection to the Zeebe broker by setting `zeebe.client.broker.contactPoint` (default: `localhost:26500`) 
-* configure the folder where the DMN files are located by setting `zeebe.worker.dmn.repository` (default: `dmn-repo`)
+* configure the folder where the DMN files are located by setting `zeebe.client.worker.dmn.repository` (default: `dmn-repo`)
 
 For a local setup, the repository contains a [docker-compose file](docker/docker-compose.yml). It starts a Zeebe broker and the worker. 
 
@@ -62,14 +62,14 @@ By default, the DMN files are read from the folder `dmn-repo` next to the applic
 
 ```
 zeebe:
-  worker:
-    defaultName: camunda-dmn-worker
-    defaultType: DMN
-    threads: 3
-
-    dmn.repository: dmn-repo
-
   client:
+    worker:
+      defaultName: camunda-dmn-worker
+      defaultType: DMN
+      threads: 3
+    
+      dmn.repository: dmn-repo
+
     job.timeout: 10000
     broker.contactPoint: 127.0.0.1:26500
     security.plaintext: true
