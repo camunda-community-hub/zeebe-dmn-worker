@@ -37,7 +37,7 @@ import org.springframework.stereotype.Component;
 public class DmnRepository {
   private static final Logger LOG = LoggerFactory.getLogger(DmnRepository.class);
 
-  @Value("${zeebe.worker.dmn.repository}")
+  @Value("${zeebe.client.worker.dmn.repository}")
   private String dmnRepositoryFolder;
 
   private final DmnEngine dmnEngine;

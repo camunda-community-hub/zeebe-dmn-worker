@@ -31,7 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(properties = {"zeebe.worker.dmn.repository=src/test/resources"})
+@SpringBootTest(properties = {"zeebe.client.worker.dmn.repository=src/test/resources"})
 public class WorkflowTest {
 
   @ClassRule public static final ZeebeTestRule TEST_RULE = new ZeebeTestRule();
