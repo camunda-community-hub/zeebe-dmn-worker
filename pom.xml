@@ -41,7 +41,7 @@
     <version.zeebe>0.23.2</version.zeebe>
     <version.zeebe.spring>0.23.0</version.zeebe.spring>
 
-    <version.dmn>7.12.0</version.dmn>
+    <version.dmn>7.13.0</version.dmn>
     <version.feel>1.11.2</version.feel>
 
     <version.spring.boot>2.3.1.RELEASE</version.spring.boot>
