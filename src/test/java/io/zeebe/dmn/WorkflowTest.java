@@ -15,10 +15,14 @@
  */
 package io.zeebe.dmn;
 
-import io.zeebe.client.api.response.WorkflowInstanceEvent;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
+
+import io.zeebe.client.ZeebeClient;
+import io.zeebe.containers.ZeebeBrokerContainer;
+import io.zeebe.containers.ZeebePort;
 import io.zeebe.model.bpmn.Bpmn;
 import io.zeebe.model.bpmn.BpmnModelInstance;
-import io.zeebe.test.ZeebeTestRule;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -34,17 +38,25 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(properties = {"zeebe.client.worker.dmn.repository=src/test/resources"})
 public class WorkflowTest {
 
-  @ClassRule public static final ZeebeTestRule TEST_RULE = new ZeebeTestRule();
+  @ClassRule public static final ZeebeBrokerContainer ZEEBE = new ZeebeBrokerContainer("0.23.2");
+
+  private ZeebeClient client;
 
   @BeforeClass
   public static void init() {
-    System.setProperty(
-        "zeebe.client.broker.contactPoint",
-        TEST_RULE.getClient().getConfiguration().getBrokerContactPoint());
+    final var gatewayContactPoint = ZEEBE.getExternalAddress(ZeebePort.GATEWAY);
+    System.setProperty("zeebe.client.broker.contactPoint", gatewayContactPoint);
   }
 
   @Before
   public void deploy() {
+    client =
+        ZeebeClient.newClientBuilder()
+            .brokerContactPoint(ZEEBE.getExternalAddress(ZeebePort.GATEWAY))
+            .usePlaintext()
+            .build();
+
+    // given
     final BpmnModelInstance workflowDefinition =
         Bpmn.createExecutableProcess("process")
             .startEvent()
@@ -54,29 +66,26 @@ public class WorkflowTest {
             .endEvent()
             .done();
 
-    TEST_RULE
-        .getClient()
-        .newDeployCommand()
-        .addWorkflowModel(workflowDefinition, "process.bpmn")
-        .send()
-        .join();
+    client.newDeployCommand().addWorkflowModel(workflowDefinition, "process.bpmn").send().join();
   }
 
   @Test
   public void shouldCompleteWorkflowInstance() {
-    final WorkflowInstanceEvent workflowInstance =
-        TEST_RULE
-            .getClient()
+    // when
+    final var workflowInstanceResult =
+        client
             .newCreateInstanceCommand()
             .bpmnProcessId("process")
             .latestVersion()
             .variables(Collections.singletonMap("in", "foo"))
+            .withResult()
             .send()
             .join();
 
-    final List<Map<String, String>> expectedResult =
-        Collections.singletonList(Collections.singletonMap("out", "yeah!"));
+    // then
+    final var expectedResult = List.of(Map.of("out", "yeah!"));
 
-    ZeebeTestRule.assertThat(workflowInstance).isEnded().hasVariable("result", expectedResult);
+    assertThat(workflowInstanceResult.getVariablesAsMap())
+        .contains(entry("result", expectedResult));
   }
 }

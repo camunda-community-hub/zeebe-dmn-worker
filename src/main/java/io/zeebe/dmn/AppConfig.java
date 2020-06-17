@@ -15,10 +15,6 @@ public class AppConfig {
     final DefaultDmnEngineConfiguration config =
         (DefaultDmnEngineConfiguration)
             DmnEngineConfiguration.createDefaultDmnEngineConfiguration();
-    config.setDefaultInputEntryExpressionLanguage("feel-scala-unary-tests");
-    config.setDefaultOutputEntryExpressionLanguage("feel-scala");
-    config.setDefaultInputExpressionExpressionLanguage("feel-scala");
-    config.setDefaultLiteralExpressionLanguage("feel-scala");
     return config.buildEngine();
   }
 }
