@@ -130,7 +130,7 @@
       <groupId>io.zeebe</groupId>
       <artifactId>zeebe-test-container</artifactId>
       <scope>test</scope>
-      <version>0.33.0</version>
+      <version>1.0.1</version>
     </dependency>
 
 
