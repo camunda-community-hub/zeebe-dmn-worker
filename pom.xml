@@ -43,7 +43,7 @@
 
     <version.dmn>7.14.0</version.dmn>
 
-    <version.spring.boot>2.4.0</version.spring.boot>
+    <version.spring.boot>2.4.1</version.spring.boot>
 
     <!-- release parent settings -->
     <version.java>11</version.java>
