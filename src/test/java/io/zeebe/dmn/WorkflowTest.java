@@ -19,42 +19,34 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 
 import io.zeebe.client.ZeebeClient;
-import io.zeebe.containers.ZeebeBrokerContainer;
-import io.zeebe.containers.ZeebePort;
+import io.zeebe.containers.ZeebeContainer;
 import io.zeebe.model.bpmn.Bpmn;
 import io.zeebe.model.bpmn.BpmnModelInstance;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(properties = {"zeebe.client.worker.dmn.repository=src/test/resources"})
+@Testcontainers
 public class WorkflowTest {
 
-  @ClassRule public static final ZeebeBrokerContainer ZEEBE = new ZeebeBrokerContainer("0.23.2");
+  @Container private static final ZeebeContainer ZEEBE_CONTAINER = new ZeebeContainer();
 
-  private ZeebeClient client;
+  private static ZeebeClient ZEEBE_CLIENT;
 
-  @BeforeClass
+  @BeforeAll
   public static void init() {
-    final var gatewayContactPoint = ZEEBE.getExternalAddress(ZeebePort.GATEWAY);
-    System.setProperty("zeebe.client.broker.contactPoint", gatewayContactPoint);
-  }
 
-  @Before
-  public void deploy() {
-    client =
-        ZeebeClient.newClientBuilder()
-            .brokerContactPoint(ZEEBE.getExternalAddress(ZeebePort.GATEWAY))
-            .usePlaintext()
-            .build();
+    final var gatewayContactPoint = ZEEBE_CONTAINER.getExternalGatewayAddress();
+    System.setProperty("zeebe.client.broker.contactPoint", gatewayContactPoint);
+
+    ZEEBE_CLIENT =
+        ZeebeClient.newClientBuilder().gatewayAddress(gatewayContactPoint).usePlaintext().build();
 
     // given
     final BpmnModelInstance workflowDefinition =
@@ -66,14 +58,18 @@ public class WorkflowTest {
             .endEvent()
             .done();
 
-    client.newDeployCommand().addWorkflowModel(workflowDefinition, "process.bpmn").send().join();
+    ZEEBE_CLIENT
+        .newDeployCommand()
+        .addWorkflowModel(workflowDefinition, "process.bpmn")
+        .send()
+        .join();
   }
 
   @Test
   public void shouldCompleteWorkflowInstance() {
     // when
     final var workflowInstanceResult =
-        client
+        ZEEBE_CLIENT
             .newCreateInstanceCommand()
             .bpmnProcessId("process")
             .latestVersion()
