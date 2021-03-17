@@ -1,5 +1,10 @@
 # zeebe-dmn-worker
 
+[![](https://img.shields.io/badge/Community%20Extension-An%20open%20source%20community%20maintained%20project-FF4700)](https://github.com/camunda-community-hub/community)
+
+[![](https://img.shields.io/badge/Lifecycle-Stable-brightgreen)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#stable-)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 A Zeebe worker to evaluate DMN decisions (i.e. business rule tasks). It uses the [Camunda DMN engine](https://docs.camunda.org/manual/7.12/reference/dmn11/) including the [FEEL-Scala engine](https://github.com/camunda/feel-scala) to evaluate DMN decisions. The DMN files are read from a local directory.
 
 ## Usage
