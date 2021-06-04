@@ -6,7 +6,7 @@
   <name>Zeebe DMN extension</name>
   <groupId>io.zeebe</groupId>
   <artifactId>zeebe-dmn-worker</artifactId>
-  <version>0.6.0-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <parent>
