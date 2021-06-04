@@ -18,10 +18,10 @@ package io.zeebe.dmn;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 
-import io.zeebe.client.ZeebeClient;
+import io.camunda.zeebe.client.ZeebeClient;
+import io.camunda.zeebe.model.bpmn.Bpmn;
+import io.camunda.zeebe.model.bpmn.BpmnModelInstance;
 import io.zeebe.containers.ZeebeContainer;
-import io.zeebe.model.bpmn.Bpmn;
-import io.zeebe.model.bpmn.BpmnModelInstance;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +35,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public class WorkflowTest {
 
-  @Container private static final ZeebeContainer ZEEBE_CONTAINER = new ZeebeContainer();
+  @Container
+  private static final ZeebeContainer ZEEBE_CONTAINER = new ZeebeContainer();
 
   private static ZeebeClient ZEEBE_CLIENT;
 
@@ -49,7 +50,7 @@ public class WorkflowTest {
         ZeebeClient.newClientBuilder().gatewayAddress(gatewayContactPoint).usePlaintext().build();
 
     // given
-    final BpmnModelInstance workflowDefinition =
+    final BpmnModelInstance process =
         Bpmn.createExecutableProcess("process")
             .startEvent()
             .serviceTask("make-decision")
@@ -60,7 +61,7 @@ public class WorkflowTest {
 
     ZEEBE_CLIENT
         .newDeployCommand()
-        .addWorkflowModel(workflowDefinition, "process.bpmn")
+        .addProcessModel(process, "process.bpmn")
         .send()
         .join();
   }
@@ -68,7 +69,7 @@ public class WorkflowTest {
   @Test
   public void shouldCompleteWorkflowInstance() {
     // when
-    final var workflowInstanceResult =
+    final var processInstanceResult =
         ZEEBE_CLIENT
             .newCreateInstanceCommand()
             .bpmnProcessId("process")
@@ -81,7 +82,7 @@ public class WorkflowTest {
     // then
     final var expectedResult = List.of(Map.of("out", "yeah!"));
 
-    assertThat(workflowInstanceResult.getVariablesAsMap())
+    assertThat(processInstanceResult.getVariablesAsMap())
         .contains(entry("result", expectedResult));
   }
 }

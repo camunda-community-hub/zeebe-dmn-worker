@@ -21,7 +21,7 @@
     <dependencies>
 
       <dependency>
-        <groupId>io.zeebe</groupId>
+        <groupId>io.camunda</groupId>
         <artifactId>zeebe-bom</artifactId>
         <version>${version.zeebe}</version>
         <scope>import</scope>
@@ -40,8 +40,8 @@
   </dependencyManagement>
 
   <properties>
-    <version.zeebe>0.26.1</version.zeebe>
-    <version.zeebe.spring>0.26.2</version.zeebe.spring>
+    <version.zeebe>1.0.0</version.zeebe>
+    <version.zeebe.spring>1.0.0</version.zeebe.spring>
 
     <version.dmn>7.14.0</version.dmn>
 
@@ -70,7 +70,7 @@
 
     <!-- spring deps-->
     <dependency>
-      <groupId>io.zeebe.spring</groupId>
+      <groupId>io.camunda</groupId>
       <artifactId>spring-zeebe-starter</artifactId>
       <version>${version.zeebe.spring}</version>
     </dependency>
@@ -103,12 +103,6 @@
     </dependency>
 
     <dependency>
-      <groupId>io.zeebe</groupId>
-      <artifactId>zeebe-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <version>5.7.1</version>
@@ -125,13 +119,13 @@
       <groupId>io.zeebe</groupId>
       <artifactId>zeebe-test-container</artifactId>
       <scope>test</scope>
-      <version>1.0.1</version>
+      <version>3.0.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>1.15.2</version>
+      <version>1.15.3</version>
       <scope>test</scope>
     </dependency>
 
