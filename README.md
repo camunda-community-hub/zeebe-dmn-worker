@@ -34,10 +34,10 @@ Example BPMN with service task:
 
 ### Docker
 
-The docker image for the worker is published to [DockerHub](https://hub.docker.com/r/camunda/zeebe-dmn-worker).
+The docker image for the worker is published to [GitHub Packages](https://github.com/orgs/camunda-community-hub/packages/container/package/zeebe-dmn-worker).
 
 ```
-docker pull camunda/zeebe-dmn-worker:latest
+docker pull ghcr.io/camunda-community-hub/zeebe-dmn-worker:1.0.0
 ```
 * configure the connection to the Zeebe broker by setting `zeebe.client.broker.contactPoint` (default: `localhost:26500`) 
 * configure the folder where the DMN files are located by setting `zeebe.client.worker.dmn.repository` (default: `dmn-repo`)
@@ -51,7 +51,7 @@ docker-compose up
 
 ### Manual
 
-1. Download the latest [worker JAR](https://github.com/zeebe-io/zeebe-dmn-worker/releases) _(zeebe-dmn-worker-%{VERSION}.jar
+1. Download the latest [worker JAR](https://github.com/camunda-community-hub/zeebe-dmn-worker/releases) _(zeebe-dmn-worker-%{VERSION}.jar
 )_
 
 1. Start the worker
