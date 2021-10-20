@@ -41,7 +41,7 @@
     <version.zeebe>1.2.1</version.zeebe>
     <version.zeebe.spring>1.2.1</version.zeebe.spring>
 
-    <version.dmn>7.15.0</version.dmn>
+    <version.dmn>7.16.0</version.dmn>
 
     <version.spring.boot>2.5.5</version.spring.boot>
 
