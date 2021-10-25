@@ -39,7 +39,7 @@
 
   <properties>
     <version.zeebe>1.2.1</version.zeebe>
-    <version.zeebe.spring>1.2.2</version.zeebe.spring>
+    <version.zeebe.spring>1.2.3</version.zeebe.spring>
 
     <version.dmn>7.16.0</version.dmn>
 
