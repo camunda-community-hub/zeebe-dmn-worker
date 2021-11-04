@@ -46,9 +46,11 @@ public class DmnJobHandler implements JobHandler {
   public void handle(JobClient client, ActivatedJob job) {
 
     final DmnDecision decision = findDecisionForTask(job);
+    System.out.println(decision);
     final Map<String, Object> variables = job.getVariablesAsMap();
-
+    System.out.println(variables);
     final DmnDecisionResult decisionResult = dmnEngine.evaluateDecision(decision, variables);
+    System.out.println(decisionResult);
 
     client
         .newCompleteCommand(job.getKey())

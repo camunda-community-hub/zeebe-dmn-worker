@@ -1,5 +1,9 @@
 zeebe:
   client:
+    cloud:
+      clusterId: your cluster id
+      clientId: your client id
+      clientSecret: your client secret
     worker:
       defaultName: camunda-dmn-worker
       defaultType: DMN
@@ -8,8 +12,6 @@ zeebe:
       dmn.repository: dmn-repo
 
     job.timeout: 10000
-    broker.contactPoint: 127.0.0.1:26500
-    security.plaintext: true
 
 logging:
   level:
@@ -20,3 +22,5 @@ logging:
 management:
   server:
     port: 8081
+
+server.port: 8082
