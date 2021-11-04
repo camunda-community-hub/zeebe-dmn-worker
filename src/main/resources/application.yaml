@@ -1,9 +1,9 @@
 zeebe:
   client:
-    cloud:
-      clusterId: your cluster id
-      clientId: your client id
-      clientSecret: your client secret
+#    cloud:
+#      clusterId: <YOUR_CLUSTER_ID>
+#      clientId: <YOUR_CLIENT_ID>
+#      clientSecret: <YOUR_CLIENT_SECRET>
     worker:
       defaultName: camunda-dmn-worker
       defaultType: DMN
@@ -12,6 +12,9 @@ zeebe:
       dmn.repository: dmn-repo
 
     job.timeout: 10000
+    # remove the following two lines when using Camunda Cloud SaaS
+    broker.contactPoint: 127.0.0.1:26500
+    security.plaintext: true
 
 logging:
   level:
