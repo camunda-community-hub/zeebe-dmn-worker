@@ -10,7 +10,7 @@
   <parent>
     <groupId>org.camunda</groupId>
     <artifactId>camunda-release-parent</artifactId>
-    <version>3.8.1</version>
+    <version>3.9.1</version>
     <!-- do not remove empty tag - http://jira.codehaus.org/browse/MNG-4687 -->
     <relativePath />
   </parent>
@@ -38,12 +38,12 @@
   </dependencyManagement>
 
   <properties>
-    <version.zeebe>1.2.1</version.zeebe>
-    <version.zeebe.spring>1.1.0</version.zeebe.spring>
+    <version.zeebe>1.2.3</version.zeebe>
+    <version.zeebe.spring>1.2.3</version.zeebe.spring>
 
-    <version.dmn>7.15.0</version.dmn>
+    <version.dmn>7.16.0</version.dmn>
 
-    <version.spring.boot>2.5.5</version.spring.boot>
+    <version.spring.boot>2.5.6</version.spring.boot>
 
     <!-- release parent settings -->
     <version.java>11</version.java>
@@ -123,7 +123,7 @@
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>1.16.0</version>
+      <version>1.16.2</version>
       <scope>test</scope>
     </dependency>
 
