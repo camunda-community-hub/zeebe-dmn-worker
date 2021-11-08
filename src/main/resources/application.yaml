@@ -25,5 +25,3 @@ logging:
 management:
   server:
     port: 8081
-
-server.port: 8082
