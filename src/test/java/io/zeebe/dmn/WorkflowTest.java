@@ -43,11 +43,11 @@ public class WorkflowTest {
   @BeforeAll
   public static void init() {
 
-    final var gatewayContactPoint = ZEEBE_CONTAINER.getExternalGatewayAddress();
-    System.setProperty("zeebe.client.broker.contactPoint", gatewayContactPoint);
+    final var gatewayAddress = ZEEBE_CONTAINER.getExternalGatewayAddress();
+    System.setProperty("zeebe.client.broker.gatewayAddress", gatewayAddress);
 
     ZEEBE_CLIENT =
-        ZeebeClient.newClientBuilder().gatewayAddress(gatewayContactPoint).usePlaintext().build();
+        ZeebeClient.newClientBuilder().gatewayAddress(gatewayAddress).usePlaintext().build();
 
     // given
     final BpmnModelInstance process =
