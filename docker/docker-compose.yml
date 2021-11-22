@@ -19,7 +19,7 @@ services:
     container_name: zeebe-dmn-worker
     image: ghcr.io/camunda-community-hub/zeebe-dmn-worker:1.0.0
     environment:
-      - zeebe.client.broker.contactPoint=zeebe:26500
+      - zeebe.client.broker.gatewayAddress=zeebe:26500
       - zeebe.client.worker.dmn.repository=/usr/share/zeebe/dmn-repo
     volumes:
       - ./dmn-repo:/usr/share/zeebe/dmn-repo
