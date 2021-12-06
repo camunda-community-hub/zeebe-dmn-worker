@@ -37,12 +37,12 @@ Example BPMN with service task:
 The docker image for the worker is published to [GitHub Packages](https://github.com/orgs/camunda-community-hub/packages/container/package/zeebe-dmn-worker).
 
 ```
-docker pull ghcr.io/camunda-community-hub/zeebe-dmn-worker:1.0.0
+docker pull ghcr.io/camunda-community-hub/zeebe-dmn-worker:1.1.0
 ```
-* configure the connection to the Zeebe broker by setting `zeebe.client.broker.contactPoint` (default: `localhost:26500`) 
+* configure the connection to the Zeebe gateway by setting `zeebe.client.broker.gatewayAddress` (default: `localhost:26500`) 
 * configure the folder where the DMN files are located by setting `zeebe.client.worker.dmn.repository` (default: `dmn-repo`)
 
-For a local setup, the repository contains a [docker-compose file](docker/docker-compose.yml). It starts a Zeebe broker and the worker. 
+For a local setup, the repository contains a [docker-compose file](docker/docker-compose.yml). It starts a Zeebe broker with an embedded gateway and the worker. 
 
 ```
 cd docker
@@ -78,7 +78,7 @@ zeebe:
       dmn.repository: dmn-repo
 
     job.timeout: 10000
-    broker.contactPoint: 127.0.0.1:26500
+    broker.gatewayAddress: 127.0.0.1:26500
     security.plaintext: true
 ```
 

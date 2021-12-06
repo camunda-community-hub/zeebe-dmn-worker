@@ -4,7 +4,7 @@
   <name>Zeebe DMN extension</name>
   <groupId>io.zeebe</groupId>
   <artifactId>zeebe-dmn-worker</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <parent>
@@ -39,11 +39,11 @@
 
   <properties>
     <version.zeebe>1.2.4</version.zeebe>
-    <version.zeebe.spring>1.2.3</version.zeebe.spring>
+    <version.zeebe.spring>1.2.6</version.zeebe.spring>
 
     <version.dmn>7.16.0</version.dmn>
 
-    <version.spring.boot>2.5.6</version.spring.boot>
+    <version.spring.boot>2.6.1</version.spring.boot>
 
     <!-- release parent settings -->
     <version.java>11</version.java>
@@ -103,7 +103,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.8.1</version>
+      <version>5.8.2</version>
     </dependency>
 
     <dependency>
@@ -117,7 +117,7 @@
       <groupId>io.zeebe</groupId>
       <artifactId>zeebe-test-container</artifactId>
       <scope>test</scope>
-      <version>3.0.0</version>
+      <version>3.1.0</version>
     </dependency>
 
     <dependency>
