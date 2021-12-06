@@ -13,7 +13,7 @@ zeebe:
 
     job.timeout: 10000
     # remove the following two lines when using Camunda Cloud SaaS
-    broker.gatewayAddress: 127.0.0.1:26500
+    broker.contactPoint: 127.0.0.1:26500
     security.plaintext: true
 
 logging:
