@@ -63,6 +63,8 @@ The worker is a Spring Boot application that uses the [Spring Zeebe Starter](htt
 * [Spring Zeebe Configuration](https://github.com/zeebe-io/spring-zeebe#configuring-zeebe-connection)
 * [Spring Boot Configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config)
 
+For configuration with Camunda Cloud SaaS, open the 'application.yaml' file located in `src/main/resources` and remove the '#' sign from lines 3-6. Replace the placeholder values for `clusterId`, `clientId`, and `clientSecret` with your cloud credentials. Follow the instructions provided on line 15 as well.
+
 By default, the DMN files are read from the folder `dmn-repo` next to the application (i.e. the working directory).
 
 ```
