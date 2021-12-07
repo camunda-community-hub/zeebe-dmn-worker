@@ -21,7 +21,9 @@ logging:
     root: ERROR
     io.zeebe: INFO
     io.zeebe.dmn: DEBUG
-
+# delete lines 25-27 and remove the '#' from '#server.port: 8081' when using Camunda Cloud SaaS
 management:
   server:
     port: 8081
+
+#server.port: 8081
