@@ -38,7 +38,7 @@
   </dependencyManagement>
 
   <properties>
-    <version.zeebe>1.2.4</version.zeebe>
+    <version.zeebe>1.2.5</version.zeebe>
     <version.zeebe.spring>1.2.6</version.zeebe.spring>
 
     <version.dmn>7.16.0</version.dmn>
@@ -117,7 +117,7 @@
       <groupId>io.zeebe</groupId>
       <artifactId>zeebe-test-container</artifactId>
       <scope>test</scope>
-      <version>3.1.0</version>
+      <version>3.2.0</version>
     </dependency>
 
     <dependency>
