@@ -15,14 +15,6 @@
  */
 package io.zeebe.dmn;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Predicate;
-import javax.annotation.PostConstruct;
 import org.camunda.bpm.dmn.engine.DmnDecision;
 import org.camunda.bpm.dmn.engine.DmnEngine;
 import org.camunda.bpm.model.dmn.Dmn;
@@ -33,6 +25,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Predicate;
+
 @Component
 public class DmnRepository {
   private static final Logger LOG = LoggerFactory.getLogger(DmnRepository.class);
@@ -41,8 +43,10 @@ public class DmnRepository {
   private String dmnRepositoryFolder;
 
   private final DmnEngine dmnEngine;
+  private RecursiveWatcherService recursiveWatcherService;
 
   private final Map<String, DmnDecision> decisionsById = new HashMap<>();
+  private final Map<String, String> decisionIdByPath = new HashMap<>();
 
   @Autowired
   public DmnRepository(DmnEngine dmnEngine) {
@@ -69,6 +73,21 @@ public class DmnRepository {
     } catch (IOException e) {
       LOG.error("Fail to scan directory: {}", repositoryPath.toAbsolutePath(), e);
     }
+
+    try {
+      recursiveWatcherService = new RecursiveWatcherService(repositoryPath,
+        this::readDmnFile,
+        this::deleteDmnFile,
+        (path) -> {this.deleteDmnFile(path); this.readDmnFile(path);});
+      recursiveWatcherService.init();
+    } catch (Exception e) {
+      LOG.error("Fail to recursive Watch directory: {}", repositoryPath.toAbsolutePath(), e);
+    }
+  }
+
+  @PreDestroy
+  public void cleanup() {
+    recursiveWatcherService.cleanup();
   }
 
   private void readDmnFile(Path dmnFile) {
@@ -87,9 +106,20 @@ public class DmnRepository {
                     dmnFile.toAbsolutePath());
 
                 decisionsById.put(decision.getKey(), decision);
+                decisionIdByPath.put(dmnFile.toAbsolutePath().toString(), decision.getKey());
               });
     } catch (Throwable t) {
       LOG.warn("Failed to parse decision: {}", fileName, t);
+    }
+  }
+
+  private void deleteDmnFile(Path dmnFile) {
+    String key = dmnFile.toAbsolutePath().toString();
+    if (decisionIdByPath.containsKey(key)) {
+      String decisionId = decisionIdByPath.get(key);
+      LOG.info("Delete decision with id '{}' in file: {}", decisionId, key);
+      decisionsById.remove(decisionId);
+      decisionIdByPath.remove(key);
     }
   }
 
