@@ -15,6 +15,9 @@ public class AppConfig {
     final DefaultDmnEngineConfiguration config =
         (DefaultDmnEngineConfiguration)
             DmnEngineConfiguration.createDefaultDmnEngineConfiguration();
+
+    config.getCustomPostDecisionTableEvaluationListeners().add(new DmnDecisionTableLoggingListener());
+
     return config.buildEngine();
   }
 }
