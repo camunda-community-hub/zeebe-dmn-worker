@@ -38,7 +38,7 @@
   </dependencyManagement>
 
   <properties>
-    <version.zeebe>1.2.6</version.zeebe>
+    <version.zeebe>1.2.7</version.zeebe>
     <version.zeebe.spring>1.2.7</version.zeebe.spring>
 
     <version.dmn>7.16.0</version.dmn>
