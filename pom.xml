@@ -116,7 +116,7 @@
       <groupId>io.zeebe</groupId>
       <artifactId>zeebe-test-container</artifactId>
       <scope>test</scope>
-      <version>3.3.0</version>
+      <version>3.4.0</version>
     </dependency>
 
     <dependency>
