@@ -40,7 +40,7 @@
     <version.zeebe>8.1.2</version.zeebe>
     <version.zeebe.spring>8.0.9</version.zeebe.spring>
 
-    <version.dmn>7.17.0</version.dmn>
+    <version.dmn>7.18.0</version.dmn>
 
     <version.spring.boot>2.7.5</version.spring.boot>
 
