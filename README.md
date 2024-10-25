@@ -6,12 +6,12 @@
 
 [![Compatible with: Camunda Platform 8](https://img.shields.io/badge/Compatible%20with-Camunda%20Platform%208-0072Ce)](https://github.com/camunda-community-hub/community/blob/main/extension-lifecycle.md#compatiblilty)
 
-A Zeebe worker to evaluate DMN decisions (i.e. business rule tasks). It uses the [Camunda DMN engine](https://docs.camunda.org/manual/7.12/reference/dmn11/) including the [FEEL-Scala engine](https://github.com/camunda/feel-scala) to evaluate DMN decisions. The DMN files are read from a local directory.
-
-> **Warning**
-> This community extension is deprecated. You should evaluate DMN decisions directly in Camunda 8 using a [business rule task](https://docs.camunda.io/docs/next/components/modeler/bpmn/business-rule-tasks/). 
+> [!IMPORTANT]
+> This community extension is **deprecated**. You should evaluate DMN decisions directly in Camunda 8 using a [business rule task](https://docs.camunda.io/docs/next/components/modeler/bpmn/business-rule-tasks/). 
 >
 > Thank you to all [contributors](https://github.com/camunda-community-hub/zeebe-dmn-worker/graphs/contributors) for making it a great extension. :tada:
+
+A Zeebe worker to evaluate DMN decisions (i.e. business rule tasks). It uses the [Camunda DMN engine](https://docs.camunda.org/manual/7.12/reference/dmn11/) including the [FEEL-Scala engine](https://github.com/camunda/feel-scala) to evaluate DMN decisions. The DMN files are read from a local directory.
 
 ## Usage
 
